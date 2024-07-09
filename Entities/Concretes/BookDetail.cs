@@ -1,0 +1,21 @@
+﻿using Entities.Abstracts;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Entities.Concretes
+{
+    public class BookDetail : IEntity
+    {
+        [Key]
+        public Guid Id { get; set; }
+        [Required]
+        public string Description { get; set; } = String.Empty;
+        [Required]
+        public string[]? Gallery { get; set; }
+
+    }
+}

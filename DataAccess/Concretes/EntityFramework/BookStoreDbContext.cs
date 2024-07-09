@@ -1,4 +1,5 @@
-﻿using Entities.Concretes;
+﻿
+using Entities.Concretes;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,6 @@ namespace DataAccess.Concretes.EntityFramework
 
         //Db'de yaratılacak isimler çoğul olur genel olarak.
         //DbSet  belirli bir türdeki veritabanından sorgulanabilen tüm varlıkların koleksiyonunu temsil eder
-        public DbSet<Book> Books { get; set; } //DB Book tablosunun replika entitysidir.
+        public DbSet<Book>? Books { get; set; } //DB Book tablosunun replika entitysidir.
     }
 }

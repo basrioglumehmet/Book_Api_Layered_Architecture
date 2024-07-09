@@ -1,5 +1,7 @@
-﻿using DataAccess.Concretes.EntityFramework;
+﻿using AutoMapper;
+using DataAccess.Concretes.EntityFramework;
 using Entities.Concretes;
+using Entities.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,10 +14,12 @@ namespace WebApi.Controllers
     public class BookController : ControllerBase
     {
         private readonly BookStoreDbContext _dbContext; //Otomatik DI EF Core
+        private readonly IMapper _mapper;
 
-        public BookController(BookStoreDbContext dbContext)
+        public BookController(BookStoreDbContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
+            this._mapper = mapper;
         }
         // GET: api/<BookController>
         [HttpGet]
@@ -33,9 +37,10 @@ namespace WebApi.Controllers
 
         // POST api/<BookController>
         [HttpPost]
-        public void Post([FromBody] Book entity)
+        public void Post([FromBody] BookDto entity)
         {
-            var added = _dbContext.Books.Add(entity);
+            var book = _mapper.Map<Book>(entity);
+            var added = _dbContext.Books.Add(book);
             added.State = EntityState.Added;
             _dbContext.SaveChanges();
         }
