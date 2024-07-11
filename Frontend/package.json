@@ -13,6 +13,7 @@
     "@tanstack/react-query": "^5.50.1",
     "@tanstack/react-router": "^1.43.13",
     "clsx": "^2.1.1",
+    "fbemitter": "^3.0.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-icons": "^5.2.1",
@@ -23,6 +24,7 @@
   "devDependencies": {
     "@tanstack/router-devtools": "^1.43.13",
     "@tanstack/router-plugin": "^1.43.13",
+    "@types/fbemitter": "^2.0.35",
     "@types/node": "^20.14.10",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",

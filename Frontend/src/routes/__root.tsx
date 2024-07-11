@@ -69,7 +69,7 @@ export const Route = createRootRoute({
                       9+
                     </div>
                   </div>
-                  <Link to="/favorites" className="[&.active]:text-primary ">
+                  <Link to="/user/favorites" className="[&.active]:text-primary ">
                     Favorilerim
                   </Link>
                 </li>

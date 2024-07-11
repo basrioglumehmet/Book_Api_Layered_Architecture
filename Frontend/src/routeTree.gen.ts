@@ -13,6 +13,9 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as LayoutuserImport } from './routes/_layout_user'
+import { Route as LayoutuserUserUserImport } from './routes/_layout_user/user/user'
+import { Route as LayoutuserUserFavoritesImport } from './routes/_layout_user/user/favorites'
 
 // Create Virtual Routes
 
@@ -20,10 +23,25 @@ const IndexLazyImport = createFileRoute('/')()
 
 // Create/Update Routes
 
+const LayoutuserRoute = LayoutuserImport.update({
+  id: '/_layout_user',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const IndexLazyRoute = IndexLazyImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
+
+const LayoutuserUserUserRoute = LayoutuserUserUserImport.update({
+  path: '/user/user',
+  getParentRoute: () => LayoutuserRoute,
+} as any)
+
+const LayoutuserUserFavoritesRoute = LayoutuserUserFavoritesImport.update({
+  path: '/user/favorites',
+  getParentRoute: () => LayoutuserRoute,
+} as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -36,12 +54,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexLazyImport
       parentRoute: typeof rootRoute
     }
+    '/_layout_user': {
+      id: '/_layout_user'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof LayoutuserImport
+      parentRoute: typeof rootRoute
+    }
+    '/_layout_user/user/favorites': {
+      id: '/_layout_user/user/favorites'
+      path: '/user/favorites'
+      fullPath: '/user/favorites'
+      preLoaderRoute: typeof LayoutuserUserFavoritesImport
+      parentRoute: typeof LayoutuserImport
+    }
+    '/_layout_user/user/user': {
+      id: '/_layout_user/user/user'
+      path: '/user/user'
+      fullPath: '/user/user'
+      preLoaderRoute: typeof LayoutuserUserUserImport
+      parentRoute: typeof LayoutuserImport
+    }
   }
 }
 
 // Create and export the route tree
 
-export const routeTree = rootRoute.addChildren({ IndexLazyRoute })
+export const routeTree = rootRoute.addChildren({
+  IndexLazyRoute,
+  LayoutuserRoute: LayoutuserRoute.addChildren({
+    LayoutuserUserFavoritesRoute,
+    LayoutuserUserUserRoute,
+  }),
+})
 
 /* prettier-ignore-end */
 
@@ -51,11 +96,27 @@ export const routeTree = rootRoute.addChildren({ IndexLazyRoute })
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/"
+        "/",
+        "/_layout_user"
       ]
     },
     "/": {
       "filePath": "index.lazy.tsx"
+    },
+    "/_layout_user": {
+      "filePath": "_layout_user.tsx",
+      "children": [
+        "/_layout_user/user/favorites",
+        "/_layout_user/user/user"
+      ]
+    },
+    "/_layout_user/user/favorites": {
+      "filePath": "_layout_user/user/favorites.tsx",
+      "parent": "/_layout_user"
+    },
+    "/_layout_user/user/user": {
+      "filePath": "_layout_user/user/user.tsx",
+      "parent": "/_layout_user"
     }
   }
 }

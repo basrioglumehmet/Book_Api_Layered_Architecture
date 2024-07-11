@@ -50,7 +50,7 @@ function Index() {
   useEffect(() => {
     const interval = setInterval(() => {
       scrollToNextSlide();
-    }, 1000);
+    }, 5000);
 
     return () => clearInterval(interval);
   }, [currentSlide, scrollToNextSlide]);

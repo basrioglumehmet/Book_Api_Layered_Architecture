@@ -12,7 +12,9 @@ export default {
         primary:"#704ac2",
         border:"#d4c8ed",
         badge:"#d8d8d8",
-        footer:"#f3f3f3"
+        footer:"#f3f3f3",
+        lightblue:"#f9f9f9",
+        green:"#44c61f"
       },
       container: {
       center: true,
