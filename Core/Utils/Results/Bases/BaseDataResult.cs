@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Core.Utilities.Responses;
+using Core.Utils;
 
-namespace Core.Utilities.Results.Bases
+namespace Core.Utils.Results.Bases
 {
     public class BaseDataResult<T> : BaseResult, IDataResult<T>
     {

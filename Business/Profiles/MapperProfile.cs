@@ -14,7 +14,7 @@ namespace Core.Utils.Profiles
         public MapperProfile()
         {
             CreateMap<Book, BookDto>().ReverseMap();
-
+            CreateMap<BookGallery, BookGalleryDto>().ReverseMap();
         }
     }
 }

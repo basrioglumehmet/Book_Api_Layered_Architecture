@@ -9,7 +9,7 @@ namespace DataAccess.Abstracts
     public interface IEntityRepository<TEntity> where TEntity : class, IEntity, new()
     {
         // Predicate lambda dynamic filter
-        List<TEntity> ReadAll(Expression<Func<TEntity, bool>> filter = null);
+        List<TEntity> ReadAll(Expression<Func<TEntity, bool>> filter = null, Func<IQueryable<TEntity>, IQueryable<TEntity>> include = null);
         TEntity Read(Expression<Func<TEntity, bool>> filter);
         void Create(TEntity entity);
         void Update(TEntity entity);

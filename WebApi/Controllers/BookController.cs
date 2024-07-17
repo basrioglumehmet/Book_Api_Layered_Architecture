@@ -1,11 +1,13 @@
 ﻿using AutoMapper;
+using Business.Abstracts;
+using Core.CrossCuttingConcerns.Exceptions;
+using Core.Utils.Results.Errors;
 using DataAccess.Concretes.EntityFramework;
 using Entities.Concretes;
 using Entities.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+using System.Net;
 
 namespace WebApi.Controllers
 {
@@ -13,19 +15,21 @@ namespace WebApi.Controllers
     [ApiController]
     public class BookController : ControllerBase
     {
-        private readonly BookStoreDbContext _dbContext; //Otomatik DI EF Core
+        private readonly IBookService _bookService;
         private readonly IMapper _mapper;
 
-        public BookController(BookStoreDbContext dbContext, IMapper mapper)
+        public BookController(IMapper _mapper, IBookService bookService)
         {
-            _dbContext = dbContext;
-            this._mapper = mapper;
+            this._bookService = bookService;
+            this._mapper = _mapper;
         }
         // GET: api/<BookController>
         [HttpGet]
         public IActionResult Get()
         {
-            return Ok(_dbContext.Books.ToList());
+            //Core.Utils.Results.Errors.ErrorResult result = new ErrorResult("An Unexpected Error: Get All Data");
+            //throw new ResultException<ErrorResult>(HttpStatusCode.Moved, result);
+            return Ok(_bookService.GetAll());
         }
 
         // GET api/<BookController>/5
@@ -35,14 +39,18 @@ namespace WebApi.Controllers
             return "value";
         }
 
+        [HttpGet("/search/{keyword}")]
+        public IActionResult SearchBooksByNameOrCategoryOrBrand(string keyword)
+        {
+            return Ok(_bookService.SearchBooksByNameOrCategoryOrBrand(keyword));
+        }
+
         // POST api/<BookController>
         [HttpPost]
         public void Post([FromBody] BookDto entity)
         {
             var book = _mapper.Map<Book>(entity);
-            var added = _dbContext.Books.Add(book);
-            added.State = EntityState.Added;
-            _dbContext.SaveChanges();
+            _bookService.Add(book);
         }
 
         // PUT api/<BookController>/5

@@ -1,12 +1,12 @@
-﻿using Core.Utilities.Responses;
-using Core.Utilities.Results.Bases;
+﻿using Core.Utils;
+using Core.Utils.Results.Bases;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.Utilities.Results.Errors
+namespace Core.Utils.Results.Errors
 {
     public class ErrorDataResult<TData> : BaseDataResult<TData>, IDataResult<TData>
     {

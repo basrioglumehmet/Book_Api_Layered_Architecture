@@ -1,14 +1,14 @@
-﻿using Core.Utilities.Responses;
-using Core.Utilities.Results.Bases;
+﻿using Core.Utils;
+using Core.Utils.Results.Bases;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.Utilities.Results.Errors
+namespace Core.Utils.Results.Errors
 {
-    internal class ErrorResult : BaseResult, IResult
+    public class ErrorResult : BaseResult, IResult
     {
         public ErrorResult() : base(false)
         {

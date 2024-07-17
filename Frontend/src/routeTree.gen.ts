@@ -13,15 +13,25 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as SearchImport } from './routes/search'
 import { Route as LayoutuserImport } from './routes/_layout_user'
-import { Route as LayoutuserUserUserImport } from './routes/_layout_user/user/user'
-import { Route as LayoutuserUserFavoritesImport } from './routes/_layout_user/user/favorites'
+import { Route as LayoutuserUserInformationsImport } from './routes/_layout_user/user/informations'
+import { Route as LayoutuserUserLayoutuserbasketlistImport } from './routes/_layout_user/user/_layout_user_basket_list'
+import { Route as LayoutuserUserLayoutuserbasketlistFavoritesImport } from './routes/_layout_user/user/_layout_user_basket_list/favorites'
+import { Route as LayoutuserUserLayoutuserbasketlistCollectionsImport } from './routes/_layout_user/user/_layout_user_basket_list/collections'
 
 // Create Virtual Routes
 
 const IndexLazyImport = createFileRoute('/')()
+const LayoutuserUserImport = createFileRoute('/_layout_user/user')()
+const LayoutuserUserIndexLazyImport = createFileRoute('/_layout_user/user/')()
 
 // Create/Update Routes
+
+const SearchRoute = SearchImport.update({
+  path: '/search',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const LayoutuserRoute = LayoutuserImport.update({
   id: '/_layout_user',
@@ -33,15 +43,42 @@ const IndexLazyRoute = IndexLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
 
-const LayoutuserUserUserRoute = LayoutuserUserUserImport.update({
-  path: '/user/user',
+const LayoutuserUserRoute = LayoutuserUserImport.update({
+  path: '/user',
   getParentRoute: () => LayoutuserRoute,
 } as any)
 
-const LayoutuserUserFavoritesRoute = LayoutuserUserFavoritesImport.update({
-  path: '/user/favorites',
-  getParentRoute: () => LayoutuserRoute,
-} as any)
+const LayoutuserUserIndexLazyRoute = LayoutuserUserIndexLazyImport.update({
+  path: '/',
+  getParentRoute: () => LayoutuserUserRoute,
+} as any).lazy(() =>
+  import('./routes/_layout_user/user/index.lazy').then((d) => d.Route),
+)
+
+const LayoutuserUserInformationsRoute = LayoutuserUserInformationsImport.update(
+  {
+    path: '/informations',
+    getParentRoute: () => LayoutuserUserRoute,
+  } as any,
+)
+
+const LayoutuserUserLayoutuserbasketlistRoute =
+  LayoutuserUserLayoutuserbasketlistImport.update({
+    id: '/_layout_user_basket_list',
+    getParentRoute: () => LayoutuserUserRoute,
+  } as any)
+
+const LayoutuserUserLayoutuserbasketlistFavoritesRoute =
+  LayoutuserUserLayoutuserbasketlistFavoritesImport.update({
+    path: '/favorites',
+    getParentRoute: () => LayoutuserUserLayoutuserbasketlistRoute,
+  } as any)
+
+const LayoutuserUserLayoutuserbasketlistCollectionsRoute =
+  LayoutuserUserLayoutuserbasketlistCollectionsImport.update({
+    path: '/collections',
+    getParentRoute: () => LayoutuserUserLayoutuserbasketlistRoute,
+  } as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -61,19 +98,54 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutuserImport
       parentRoute: typeof rootRoute
     }
-    '/_layout_user/user/favorites': {
-      id: '/_layout_user/user/favorites'
-      path: '/user/favorites'
-      fullPath: '/user/favorites'
-      preLoaderRoute: typeof LayoutuserUserFavoritesImport
+    '/search': {
+      id: '/search'
+      path: '/search'
+      fullPath: '/search'
+      preLoaderRoute: typeof SearchImport
+      parentRoute: typeof rootRoute
+    }
+    '/_layout_user/user': {
+      id: '/_layout_user/user'
+      path: '/user'
+      fullPath: '/user'
+      preLoaderRoute: typeof LayoutuserUserImport
       parentRoute: typeof LayoutuserImport
     }
-    '/_layout_user/user/user': {
-      id: '/_layout_user/user/user'
-      path: '/user/user'
-      fullPath: '/user/user'
-      preLoaderRoute: typeof LayoutuserUserUserImport
-      parentRoute: typeof LayoutuserImport
+    '/_layout_user/user/_layout_user_basket_list': {
+      id: '/_layout_user/user/_layout_user_basket_list'
+      path: '/user'
+      fullPath: '/user'
+      preLoaderRoute: typeof LayoutuserUserLayoutuserbasketlistImport
+      parentRoute: typeof LayoutuserUserRoute
+    }
+    '/_layout_user/user/informations': {
+      id: '/_layout_user/user/informations'
+      path: '/informations'
+      fullPath: '/user/informations'
+      preLoaderRoute: typeof LayoutuserUserInformationsImport
+      parentRoute: typeof LayoutuserUserImport
+    }
+    '/_layout_user/user/': {
+      id: '/_layout_user/user/'
+      path: '/'
+      fullPath: '/user/'
+      preLoaderRoute: typeof LayoutuserUserIndexLazyImport
+      parentRoute: typeof LayoutuserUserImport
+    }
+    '/_layout_user/user/_layout_user_basket_list/collections': {
+      id: '/_layout_user/user/_layout_user_basket_list/collections'
+      path: '/collections'
+      fullPath: '/user/collections'
+      preLoaderRoute: typeof LayoutuserUserLayoutuserbasketlistCollectionsImport
+      parentRoute: typeof LayoutuserUserLayoutuserbasketlistImport
+    }
+    '/_layout_user/user/_layout_user_basket_list/favorites': {
+      id: '/_layout_user/user/_layout_user_basket_list/favorites'
+      path: '/favorites'
+      fullPath: '/user/favorites'
+      preLoaderRoute: typeof LayoutuserUserLayoutuserbasketlistFavoritesImport
+      parentRoute: typeof LayoutuserUserLayoutuserbasketlistImport
     }
   }
 }
@@ -83,9 +155,17 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren({
   IndexLazyRoute,
   LayoutuserRoute: LayoutuserRoute.addChildren({
-    LayoutuserUserFavoritesRoute,
-    LayoutuserUserUserRoute,
+    LayoutuserUserRoute: LayoutuserUserRoute.addChildren({
+      LayoutuserUserLayoutuserbasketlistRoute:
+        LayoutuserUserLayoutuserbasketlistRoute.addChildren({
+          LayoutuserUserLayoutuserbasketlistCollectionsRoute,
+          LayoutuserUserLayoutuserbasketlistFavoritesRoute,
+        }),
+      LayoutuserUserInformationsRoute,
+      LayoutuserUserIndexLazyRoute,
+    }),
   }),
+  SearchRoute,
 })
 
 /* prettier-ignore-end */
@@ -97,7 +177,8 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/_layout_user"
+        "/_layout_user",
+        "/search"
       ]
     },
     "/": {
@@ -106,17 +187,44 @@ export const routeTree = rootRoute.addChildren({
     "/_layout_user": {
       "filePath": "_layout_user.tsx",
       "children": [
-        "/_layout_user/user/favorites",
-        "/_layout_user/user/user"
+        "/_layout_user/user"
       ]
     },
-    "/_layout_user/user/favorites": {
-      "filePath": "_layout_user/user/favorites.tsx",
-      "parent": "/_layout_user"
+    "/search": {
+      "filePath": "search.tsx"
     },
-    "/_layout_user/user/user": {
-      "filePath": "_layout_user/user/user.tsx",
-      "parent": "/_layout_user"
+    "/_layout_user/user": {
+      "filePath": "_layout_user/user",
+      "parent": "/_layout_user",
+      "children": [
+        "/_layout_user/user/_layout_user_basket_list",
+        "/_layout_user/user/informations",
+        "/_layout_user/user/"
+      ]
+    },
+    "/_layout_user/user/_layout_user_basket_list": {
+      "filePath": "_layout_user/user/_layout_user_basket_list.tsx",
+      "parent": "/_layout_user/user",
+      "children": [
+        "/_layout_user/user/_layout_user_basket_list/collections",
+        "/_layout_user/user/_layout_user_basket_list/favorites"
+      ]
+    },
+    "/_layout_user/user/informations": {
+      "filePath": "_layout_user/user/informations.tsx",
+      "parent": "/_layout_user/user"
+    },
+    "/_layout_user/user/": {
+      "filePath": "_layout_user/user/index.lazy.tsx",
+      "parent": "/_layout_user/user"
+    },
+    "/_layout_user/user/_layout_user_basket_list/collections": {
+      "filePath": "_layout_user/user/_layout_user_basket_list/collections.tsx",
+      "parent": "/_layout_user/user/_layout_user_basket_list"
+    },
+    "/_layout_user/user/_layout_user_basket_list/favorites": {
+      "filePath": "_layout_user/user/_layout_user_basket_list/favorites.tsx",
+      "parent": "/_layout_user/user/_layout_user_basket_list"
     }
   }
 }

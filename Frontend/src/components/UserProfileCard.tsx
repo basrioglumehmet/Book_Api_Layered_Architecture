@@ -8,6 +8,7 @@ import {
   BsMailbox,
   BsPeople,
   BsPerson,
+  BsPower,
 } from "react-icons/bs";
 
 type Props = {};
@@ -17,7 +18,7 @@ const UserProfileCard = (props: Props) => {
     <div className="w-[200px] bg-lightblue items-center flex flex-col min-h-96 space-y-5">
       <div className="w-32 h-32 p-2 rounded-full bg-white shadow-[0px_10px_1px_rgba(221,_221,_221,_1),_0_10px_20px_rgba(204,_204,_204,_1)] ">
         <img
-          src="https://i.pinimg.com/564x/6b/cb/2e/6bcb2ee542c9d576a319398b627ac916.jpg"
+          src="https://i.pinimg.com/564x/ff/de/39/ffde39fbceb3f2c9fb8c11140eab492e.jpg"
           alt=""
           className="rounded-full w-full h-full object-cover"
         />
@@ -30,7 +31,7 @@ const UserProfileCard = (props: Props) => {
       </div>
       <div className="p-2 w-full flex-1 flex">
         <div className="bg-white border rounded flex-1 flex flex-col">
-          <Link to="/" className=" flex items-center border-b p-2">
+          <Link to="/user" className=" flex items-center border-b p-2">
             <div className="flex items-center gap-5 text-2xl  justify-center flex-1 ">
               <div className="w-10 h-10 bg-lightblue  flex items-center justify-center rounded-full">
                 <BsList />
@@ -40,7 +41,7 @@ const UserProfileCard = (props: Props) => {
               <span className="inline-block ">Hesabım</span>
             </div>
           </Link>
-          <Link to="/" className=" flex items-center border-b p-2">
+          <Link to="/user/informations" className=" flex items-center border-b p-2">
             <div className="flex items-center gap-5 text-2xl  justify-center flex-1 ">
               <div className="w-10 h-10 bg-lightblue  flex items-center justify-center rounded-full">
                 <BsPerson />
@@ -50,7 +51,7 @@ const UserProfileCard = (props: Props) => {
               <span className="inline-block ">Kişisel Bilgilerim</span>
             </div>
           </Link>
-          <Link to="/" className=" flex items-center border-b p-2">
+          <Link to="/user/messages" className=" flex items-center border-b p-2">
             <div className="flex items-center gap-5 text-2xl  justify-center flex-1 ">
               <div className="w-10 h-10 bg-lightblue  flex items-center justify-center rounded-full relative">
                 <BsEnvelope />
@@ -67,7 +68,7 @@ const UserProfileCard = (props: Props) => {
           <Link to="/" className=" flex items-center p-2">
             <div className="flex items-center gap-5 text-2xl  justify-center flex-1 ">
               <div className="w-10 h-10 bg-lightblue  flex items-center justify-center rounded-full">
-                <BsPerson />
+                <BsPower />
               </div>
             </div>
             <div className="flex-1 text-sm font-bold">

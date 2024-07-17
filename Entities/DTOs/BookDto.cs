@@ -15,5 +15,7 @@ namespace Entities.DTOs
         public double Price { get; set; }
 
         public int Quantity { get; set; }
+        public string? Brand { get; set; } = string.Empty;
+        public string? Category { get; set; } = string.Empty;
     }
 }

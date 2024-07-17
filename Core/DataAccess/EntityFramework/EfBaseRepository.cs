@@ -43,12 +43,23 @@ namespace Core.DataAccess.EntityFramework
             }
         }
 
-        public List<TEntity> ReadAll(Expression<Func<TEntity, bool>> filter = null)
+        public List<TEntity> ReadAll(Expression<Func<TEntity, bool>> filter = null, Func<IQueryable<TEntity>, IQueryable<TEntity>> include = null)
         {
-            using (var dbContext = new TContext()) //Newlenmiş db context görevi bittikten sonra dispose et  serbest bırak bu bellek sızıntısını önle.
+            using (var dbContext = new TContext()) // Newlenmiş db context görevi bittikten sonra dispose et  serbest bırak bu bellek sızıntısını önle.
             {
-                var dbSet = dbContext.Set<TEntity>();
-                return filter != null ? dbSet.Where(filter).ToList() : dbSet.ToList();
+                IQueryable<TEntity> query = dbContext.Set<TEntity>();
+
+                if (include != null)
+                {
+                    query = include(query);
+                }
+
+                if (filter != null)
+                {
+                    query = query.Where(filter);
+                }
+
+                return query.ToList();
             }
         }
 

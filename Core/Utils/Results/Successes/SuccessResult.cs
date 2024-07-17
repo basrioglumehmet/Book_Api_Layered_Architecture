@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Core.Utilities.Results.Bases;
+using Core.Utils.Results.Bases;
 
-namespace Core.Utilities.Results.Successes
+namespace Core.Utils.Results.Successes
 {
     public class SuccessResult : BaseResult
     {

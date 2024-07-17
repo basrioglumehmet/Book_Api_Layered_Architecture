@@ -1,4 +1,5 @@
-﻿using Entities.Concretes;
+﻿using Core.Utils;
+using Entities.Concretes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,5 +10,6 @@ namespace Business.Abstracts
 {
     public interface IBookService : IBusinessService<Book>
     {
+        public IResult SearchBooksByNameOrCategoryOrBrand(string keyword);
     }
 }

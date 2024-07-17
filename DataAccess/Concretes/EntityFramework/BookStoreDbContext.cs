@@ -1,24 +1,51 @@
-﻿
-using Entities.Concretes;
+﻿using Entities.Concretes;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 
 namespace DataAccess.Concretes.EntityFramework
 {
-    ////DbContext : Db tabloları ile proje classlarını bağlamaktır
     public class BookStoreDbContext : DbContext
     {
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        private readonly IConfiguration? _configuration;
+
+        public BookStoreDbContext()
         {
-            optionsBuilder.UseInMemoryDatabase(databaseName: "BookStoreDb");
         }
 
-        //Db'de yaratılacak isimler çoğul olur genel olarak.
-        //DbSet  belirli bir türdeki veritabanından sorgulanabilen tüm varlıkların koleksiyonunu temsil eder
-        public DbSet<Book>? Books { get; set; } //DB Book tablosunun replika entitysidir.
+        public BookStoreDbContext(DbContextOptions<BookStoreDbContext> options, IConfiguration configuration)
+            : base(options)
+        {
+            _configuration = configuration;
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+                if (_configuration != null)
+                {
+                    optionsBuilder.UseNpgsql(_configuration.GetConnectionString("PostgreSQL"));
+                }
+                else
+                {
+                    optionsBuilder.UseNpgsql("Server=localhost;Database=book_store;Port=5432;User Id=postgres;Password=1708");
+                }
+            }
+        }
+
+
+        public DbSet<Book>? Books { get; set; }
+        public DbSet<BookGallery>? BookGalleries { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.UseSerialColumns();
+
+            modelBuilder.Entity<Book>()
+                       .HasMany(b => b.BookGalleries)
+                       .WithOne(bg => bg.Book)
+                       .HasForeignKey(bg => bg.BookId);
+
+        }
     }
 }
