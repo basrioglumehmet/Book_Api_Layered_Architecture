@@ -3,6 +3,7 @@ using System;
 using DataAccess.Concretes.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(BookStoreDbContext))]
-    partial class BookStoreDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240722034804_db_model_fixing_1")]
+    partial class db_model_fixing_1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -165,13 +167,7 @@ namespace DataAccess.Migrations
                         .HasMaxLength(15)
                         .HasColumnType("character varying(15)");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
 
                     b.ToTable("customers");
                 });
@@ -302,7 +298,7 @@ namespace DataAccess.Migrations
                 {
                     b.HasOne("Core.Entities.User", "User")
                         .WithOne()
-                        .HasForeignKey("Entities.Concretes.Customer", "UserId")
+                        .HasForeignKey("Entities.Concretes.Customer", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

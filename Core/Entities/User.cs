@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Entities.Abstracts;
 
-namespace Entities.Concretes
+namespace Core.Entities
 {
     [Table("users")]
     public class User : IEntity
@@ -21,8 +21,5 @@ namespace Entities.Concretes
         public string Email { get; set; }
         [Required]
         public string Password { get; set; }
-
-        //Navigation Property = One to many
-        public IEnumerable<BookComment> BookComments { get; set; }
     }
 }

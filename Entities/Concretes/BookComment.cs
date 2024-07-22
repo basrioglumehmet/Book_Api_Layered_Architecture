@@ -17,12 +17,12 @@ namespace Entities.Concretes
         public Guid Id { get; set; }
         public string comment { get; set; }
         //Foreign Key (Many to One)
-        public Guid UserId { get; set; }
+        public Guid CustomerId { get; set; }
         //ForeignKey
         public Guid BookId { get; set; }
         // Navigation property to Book entity
         public virtual Book Book { get; set; }
-        public virtual User User { get; set; }
+        public virtual Customer Customer { get; set; }
 
 
     }

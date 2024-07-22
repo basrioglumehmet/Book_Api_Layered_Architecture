@@ -1,4 +1,5 @@
-﻿using Entities.Concretes;
+﻿using Core.Entities;
+using Entities.Concretes;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -49,11 +50,11 @@ namespace DataAccess.Concretes.EntityFramework
                        .HasMany(b => b.BookGalleries)
                        .WithOne(bg => bg.Book)
                        .HasForeignKey(bg => bg.BookId);
-
-            modelBuilder.Entity<User>()
+            //Customer ve Yorum İlişkisidir
+            modelBuilder.Entity<Customer>()
             .HasMany(user => user.BookComments)
-            .WithOne(user => user.User)
-            .HasForeignKey(fk => fk.UserId);
+            .WithOne(user => user.Customer)
+            .HasForeignKey(fk => fk.CustomerId);
 
             // Order configuration
             modelBuilder.Entity<Order>()
@@ -150,7 +151,7 @@ namespace DataAccess.Concretes.EntityFramework
             modelBuilder.Entity<Customer>()
                 .HasOne(c => c.User)
                 .WithOne()
-                .HasForeignKey<Customer>(c => c.Id);
+                .HasForeignKey<Customer>(c => c.UserId); //Customerdaki user id user'a denk fk sahibi olmalı.
 
             modelBuilder.Entity<Customer>()
                 .HasMany(c => c.Orders)
