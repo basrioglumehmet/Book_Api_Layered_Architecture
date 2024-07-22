@@ -33,10 +33,10 @@ namespace WebApi.Controllers
         }
 
         // GET api/<BookController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("{nameId}")]
+        public IActionResult Get(string nameId)
         {
-            return "value";
+            return Ok(_bookService.GetByNameId(nameId));
         }
 
         [HttpGet("/search/{keyword}")]

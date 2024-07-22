@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace Entities.Concretes
 {
+    [Table("book_galleries")]
     public class BookGallery : IEntity
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

@@ -22,11 +22,17 @@ import { Route as LayoutuserUserLayoutuserbasketlistCollectionsImport } from './
 
 // Create Virtual Routes
 
+const NameIdLazyImport = createFileRoute('/$nameId')()
 const IndexLazyImport = createFileRoute('/')()
 const LayoutuserUserImport = createFileRoute('/_layout_user/user')()
 const LayoutuserUserIndexLazyImport = createFileRoute('/_layout_user/user/')()
 
 // Create/Update Routes
+
+const NameIdLazyRoute = NameIdLazyImport.update({
+  path: '/$nameId',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/$nameId.lazy').then((d) => d.Route))
 
 const SearchRoute = SearchImport.update({
   path: '/search',
@@ -105,6 +111,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SearchImport
       parentRoute: typeof rootRoute
     }
+    '/$nameId': {
+      id: '/$nameId'
+      path: '/$nameId'
+      fullPath: '/$nameId'
+      preLoaderRoute: typeof NameIdLazyImport
+      parentRoute: typeof rootRoute
+    }
     '/_layout_user/user': {
       id: '/_layout_user/user'
       path: '/user'
@@ -166,6 +179,7 @@ export const routeTree = rootRoute.addChildren({
     }),
   }),
   SearchRoute,
+  NameIdLazyRoute,
 })
 
 /* prettier-ignore-end */
@@ -178,7 +192,8 @@ export const routeTree = rootRoute.addChildren({
       "children": [
         "/",
         "/_layout_user",
-        "/search"
+        "/search",
+        "/$nameId"
       ]
     },
     "/": {
@@ -192,6 +207,9 @@ export const routeTree = rootRoute.addChildren({
     },
     "/search": {
       "filePath": "search.tsx"
+    },
+    "/$nameId": {
+      "filePath": "$nameId.lazy.tsx"
     },
     "/_layout_user/user": {
       "filePath": "_layout_user/user",

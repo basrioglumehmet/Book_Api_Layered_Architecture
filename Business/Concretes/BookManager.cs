@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Business.Abstracts;
+using Core.CrossCuttingConcerns.Exceptions;
 using Core.Utils;
 using Core.Utils.Results.Errors;
 using Core.Utils.Results.Successes;
@@ -9,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,27 +18,50 @@ namespace Business.Concretes
 {
     public class BookManager : IBookService
     {
-        private readonly IBookDal bookDal;
+        private readonly IBookDal _bookDal;
 
         public BookManager(IBookDal bookDal)
         {
-            this.bookDal = bookDal;
+            _bookDal = bookDal;
         }
 
         public void Add(Book entity)
         {
-            bookDal.Create(entity);
+            _bookDal.Create(entity);
         }
 
         public List<Book> GetAll()
         {
-            //Eager Loading İlişkisi
-            return bookDal.ReadAll(null,include: query => query.Include(b => b.BookGalleries)).ToList();
+            // Eager Loading Relationship
+            return _bookDal.ReadAll(null, include: query => query.Include(b => b.BookGalleries)).ToList();
         }
 
         public Book GetById(Guid id)
         {
-            return bookDal.Read(x => x.Id == id);
+            return _bookDal.Read(x => x.Id == id);
+        }
+
+        public IResult GetByNameId(string nameId)
+        {
+            var books = _bookDal.ReadAll(include: query => query.Include(b => b.BookGalleries)).ToList();
+            var entity = books.SingleOrDefault(b => b.NameId.Equals(nameId, StringComparison.OrdinalIgnoreCase));
+            if (entity == null)
+            {
+                throw new ResultException<ErrorResult>(HttpStatusCode.NotFound, new ErrorResult("Book not found"));
+            }
+
+            var result = new Dictionary<string, object>
+            {
+                { "detail", entity },
+                { "other_books", GetAllBooksByAuthor(entity.Author,entity.NameId) }
+            };
+            return new SuccessDataResult<Dictionary<string, object>>(result);
+        }
+
+        private List<Book> GetAllBooksByAuthor(string author,string currentBookNameId)
+        {
+            var books = _bookDal.ReadAll(include: query => query.Include(b => b.BookGalleries)).ToList();
+            return books.Where(b => b.Author.Equals(author, StringComparison.OrdinalIgnoreCase) && b.NameId != currentBookNameId).ToList();
         }
 
         public IResult SearchBooksByNameOrCategoryOrBrand(string keyword)
@@ -46,15 +71,15 @@ namespace Business.Concretes
                 return new ErrorDataResult<List<Book>>(null, "Keyword cannot be null or empty.");
             }
 
-            keyword = keyword.ToUpper(); // Convert keyword to upper case for case-insensitive comparison
+            var books = _bookDal.ReadAll(include: query => query.Include(b => b.BookGalleries)).ToList();
+            var upperKeyword = keyword.ToUpper();
+            var filteredBooks = books.Where(book =>
+                book.Name.Contains(upperKeyword, StringComparison.OrdinalIgnoreCase) ||
+                book.Category.Contains(upperKeyword, StringComparison.OrdinalIgnoreCase) ||
+                book.Brand.Contains(upperKeyword, StringComparison.OrdinalIgnoreCase) ||
+                book.Author.Contains(upperKeyword, StringComparison.OrdinalIgnoreCase)).ToList();
 
-            var filteredBooks = bookDal.ReadAll(book =>
-                 book.Name.ToUpper().Contains(keyword) ||
-                 book.Category.ToUpper().Contains(keyword) ||
-                 book.Brand.ToUpper().Contains(keyword) ||
-                 book.Author.ToUpper().Contains(keyword), include: query => query.Include(i => i.BookGalleries)).ToList();
-
-            if (filteredBooks.Count > 0)
+            if (filteredBooks.Any())
             {
                 return new SuccessDataResult<List<Book>>(filteredBooks);
             }
@@ -64,10 +89,9 @@ namespace Business.Concretes
             }
         }
 
-
         public void Update(Book entity)
         {
-            bookDal.Update(entity);
+            _bookDal.Update(entity);
         }
     }
 }

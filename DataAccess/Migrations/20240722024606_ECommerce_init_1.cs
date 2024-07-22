@@ -4,7 +4,7 @@
 
 namespace DataAccess.Migrations
 {
-    public partial class Initial4 : Migration
+    public partial class ECommerce_init_1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

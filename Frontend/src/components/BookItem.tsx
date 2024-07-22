@@ -4,13 +4,23 @@ import { BsBasket3Fill, BsHeart } from "react-icons/bs";
 
 import emitter from "@/utils/events/eventEmitter";
 import { Book } from "@/types/book";
+import { useNavigate, useRouterState } from "@tanstack/react-router";
 type Props = {
   data?:Book
 };
 
 const BookItem = (props: Props) => {
+  const navigate = useNavigate()
   return (
-    <div className="hover:shadow-[0px_10px_1px_rgba(221,_221,_221,_1),_0_10px_20px_rgba(204,_204,_204,_1)] p-3 cursor-pointer  w-[220px] group relative">
+    <div 
+    onClick={() =>{
+      if(props.data){
+        navigate({
+          to:"/".concat(props.data.nameId),
+        })
+      }
+    }} aria-hidden
+    className="hover:shadow-[0px_10px_1px_rgba(221,_221,_221,_1),_0_10px_20px_rgba(204,_204,_204,_1)] p-3 cursor-pointer  w-[220px] group relative">
       <div className="flex flex-col space-y-5 relative">
         <div className="flex items-center justify-center h-60 w-full">
           <img src={props.data?.bookGalleries[0].src ?? ""} alt="" className="w-full h-full  object-contain" />

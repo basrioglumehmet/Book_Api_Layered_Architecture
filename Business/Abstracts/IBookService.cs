@@ -11,5 +11,7 @@ namespace Business.Abstracts
     public interface IBookService : IBusinessService<Book>
     {
         public IResult SearchBooksByNameOrCategoryOrBrand(string keyword);
+        public IResult GetByNameId(string nameId);
+
     }
 }

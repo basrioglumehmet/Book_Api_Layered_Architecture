@@ -5,10 +5,12 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Entities.Abstracts;
 
 namespace Entities.Concretes
 {
-    public class User
+    [Table("users")]
+    public class User : IEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -19,5 +21,8 @@ namespace Entities.Concretes
         public string Email { get; set; }
         [Required]
         public string Password { get; set; }
+
+        //Navigation Property = One to many
+        public IEnumerable<BookComment> BookComments { get; set; }
     }
 }

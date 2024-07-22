@@ -3,6 +3,7 @@ using System;
 using DataAccess.Concretes.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(BookStoreDbContext))]
-    partial class BookStoreDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240722024606_ECommerce_init_1")]
+    partial class ECommerce_init_1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -176,7 +178,7 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.ToTable("orders");
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("Entities.Concretes.OrderItem", b =>
@@ -204,7 +206,7 @@ namespace DataAccess.Migrations
                     b.HasIndex("OrderId", "BookId")
                         .IsUnique();
 
-                    b.ToTable("order_items");
+                    b.ToTable("OrderItems");
                 });
 
             modelBuilder.Entity("Entities.Concretes.Payment", b =>
@@ -236,7 +238,7 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("payments");
+                    b.ToTable("Payments");
                 });
 
             modelBuilder.Entity("Entities.Concretes.User", b =>
